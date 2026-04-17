@@ -1,29 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { BookingForm } from './BookingForm';
 
-export const BookingModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    // Show after the logo loader finishes (~3.5-4s delay)
-    // Also skip if already seen in this session
-    const hasSeenBooking = sessionStorage.getItem('ocassionorbit_booking_seen');
-    
-    if (!hasSeenBooking) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 4500); // Increased delay for smoother post-preloader transition
-      
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
+export const BookingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const handleClose = () => {
-    setIsOpen(false);
+    onClose();
     sessionStorage.setItem('ocassionorbit_booking_seen', 'true');
   };
 
@@ -37,7 +21,7 @@ export const BookingModal = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="absolute inset-0 bg-[#050810]/95 backdrop-blur-2xl"
+            className="absolute inset-0 bg-[#050810]/98 backdrop-blur-3xl"
           />
 
           {/* Modal Container */}
@@ -45,14 +29,14 @@ export const BookingModal = () => {
             initial={{ opacity: 0, scale: 0.9, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 30 }}
-            className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-card border-brand-gold/20 shadow-[0_0_80px_rgba(212,175,55,0.2)]"
+            className="relative w-full max-w-4xl max-h-[95vh] overflow-y-auto bg-[#0E0E0E] rounded-[2rem] shadow-[0_0_120px_rgba(255,140,105,0.1)] border border-white/5"
           >
             {/* Close Button */}
             <button
               onClick={handleClose}
-              className="absolute top-6 right-6 p-3 text-white/30 hover:text-white transition-colors z-50 bg-white/5 rounded-full"
+              className="absolute top-8 right-8 p-4 text-white/20 hover:text-[#FF8C69] transition-all z-50 bg-white/5 rounded-full hover:bg-[#FF8C69]/10 group"
             >
-              <X size={24} />
+              <X size={20} className="group-hover:rotate-90 transition-transform duration-300" />
             </button>
 
             <div className="p-4 md:p-8">

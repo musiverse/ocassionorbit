@@ -2,95 +2,171 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Globe, Calendar, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react';
+import { 
+  Sparkles, 
+  Upload, 
+  CheckCircle2,
+  ChevronRight, 
+  ChevronLeft, 
+  Music,
+  Video,
+  Terminal,
+  ShieldCheck,
+  CircleDollarSign,
+  Phone
+} from 'lucide-react';
 import { Button } from './Button';
 
 const steps = [
-  { id: 1, title: 'Profile Sync', icon: User },
-  { id: 2, title: 'Orbit Range', icon: Globe },
-  { id: 3, title: 'Time Slot', icon: Calendar },
+  { id: 1, title: 'Identity' },
+  { id: 2, title: 'Portfolio' },
+  { id: 3, title: 'Verification' },
+  { id: 4, title: 'Potential' },
+];
+
+const categories = [
+  'Vocalist (Live)',
+  'Instrumentalist',
+  'Standup Comedian',
+  'Dance Crew',
+  'Event Anchor / MC',
+  'DJ / Electronic'
 ];
 
 export const BookingForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    contactNumber: '',
+    category: 'Vocalist (Live)',
+    stageName: '',
+    portfolioLink: '',
+    hasShots: false,
+    hasVideo: false
+  });
 
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 3));
+  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 4));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
   const handleSubmit = () => {
     setIsSubmitted(true);
   };
 
+  const stepVariants = {
+    initial: { opacity: 0, x: 20 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -20 }
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full max-w-3xl mx-auto px-4 py-8 md:py-12">
       {!isSubmitted ? (
         <>
-          <header className="text-center mb-16">
-            <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-4xl md:text-6xl font-black uppercase tracking-tighter italic mb-4"
-            >
-              Sync Your <span className="text-brand-gold not-italic">Orbit</span>
-            </motion.h2>
-            <p className="text-white/40 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] max-w-lg mx-auto leading-relaxed">
-              Secure your node in the global connectivity matrix. Events orchestrated beyond imagination.
-            </p>
-          </header>
-
-          {/* Steps Progress */}
-          <div className="flex items-center justify-between mb-16 relative max-w-2xl mx-auto">
-            <div className="absolute top-6 left-0 w-full h-px bg-white/5 -translate-y-1/2" />
-            {steps.map((step) => {
-              const Icon = step.icon;
-              const isActive = currentStep >= step.id;
-              const isCurrent = currentStep === step.id;
-              return (
-                <div key={step.id} className="relative z-10 flex flex-col items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full glass border ${isActive ? 'border-brand-gold text-brand-gold shadow-[0_0_20px_rgba(212,175,55,0.3)]' : 'border-white/10 text-white/30'} flex items-center justify-center transition-all duration-500 bg-[#050810]/80 backdrop-blur-xl`}>
-                    <Icon size={20} className={isCurrent ? 'animate-pulse' : ''} />
-                  </div>
-                  <span className={`text-[9px] font-black uppercase tracking-widest ${isActive ? 'text-white' : 'text-white/20'}`}>
-                    {step.title}
-                  </span>
-                </div>
-              );
-            })}
+          {/* Linear Kinetic Bar (Progress) */}
+          <div className="flex gap-2 mb-16 h-1 w-full bg-[#262626] rounded-full overflow-hidden">
+            {steps.map((step) => (
+              <motion.div
+                key={step.id}
+                initial={false}
+                animate={{ 
+                  backgroundColor: currentStep >= step.id ? '#D4AF37' : '#262626',
+                  flex: 1
+                }}
+                className="h-full transition-colors duration-500"
+              />
+            ))}
           </div>
 
-          {/* Form Content */}
-          <div className="glass-card p-6 md:p-10 min-h-[400px] flex flex-col justify-between border-white/5 max-w-3xl mx-auto shadow-2xl relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-purple/5 via-transparent to-brand-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-            
+          <header className="mb-12">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-[#D4AF37] text-[10px] font-black uppercase tracking-[0.4em] mb-4 block"
+            >
+              Step 0{currentStep} / 04
+            </motion.span>
+            <motion.h2
+              key={`title-${currentStep}`}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic"
+            >
+              {currentStep === 1 && <>Tell us about <span className="text-[#D4AF37] not-italic">yourself</span></>}
+              {currentStep === 2 && <>Make yourself <span className="text-[#D4AF37] not-italic">stand out</span></>}
+              {currentStep === 3 && <>Get verified <span className="text-[#D4AF37] not-italic">& listed</span></>}
+              {currentStep === 4 && <>Perform <span className="text-[#D4AF37] not-italic">& Earn</span></>}
+            </motion.h2>
+            <motion.p className="text-white/30 text-xs mt-4 font-bold uppercase tracking-wider max-w-md">
+              {currentStep === 1 && "Setup your profile by providing basic information about you and your performance areas."}
+              {currentStep === 2 && "Upload your shots to get verified from the panel & get proper traction from users."}
+              {currentStep === 3 && "Panel will review your video, assign you level tags & now you are ready to get discovered."}
+              {currentStep === 4 && "Accept bookings. Perform at the event and earn out of your potential!"}
+            </motion.p>
+          </header>
+
+          <div className="min-h-[420px] flex flex-col justify-between">
             <AnimatePresence mode="wait">
               {currentStep === 1 && (
                 <motion.div
                   key="step1"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  variants={stepVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
                   className="space-y-8"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block ml-1">Member Name</label>
-                      <input type="text" placeholder="e.g. Alex Orbit" className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 outline-none focus:border-brand-gold/50 transition-colors text-sm" />
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Full Name</label>
+                      <div className="bg-[#131313] rounded-2xl p-1 focus-within:ring-1 ring-[#D4AF37]/50 transition-all">
+                        <input 
+                          type="text" 
+                          placeholder="Your Legal Name" 
+                          className="w-full bg-transparent px-6 py-4 outline-none text-sm placeholder:text-white/10" 
+                          value={formData.fullName}
+                          onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                        />
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block ml-1">Connection Type</label>
-                      <select className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 outline-none focus:border-brand-gold/50 transition-colors text-sm appearance-none cursor-pointer">
-                        <option>Global Stream</option>
-                        <option>Physical Event</option>
-                        <option>Hybrid Core</option>
-                        <option>Private Terminal</option>
-                      </select>
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Contact Number</label>
+                      <div className="bg-[#131313] rounded-2xl p-1 flex items-center pr-6">
+                        <input 
+                          type="tel" 
+                          placeholder="+91 XXXXX XXXXX" 
+                          className="w-full bg-transparent px-6 py-4 outline-none text-sm placeholder:text-white/10" 
+                          value={formData.contactNumber}
+                          onChange={(e) => setFormData({...formData, contactNumber: e.target.value})}
+                        />
+                        <Phone size={16} className="text-white/10" />
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block ml-1">Orbit Bio</label>
-                    <textarea placeholder="Describe your event energy..." rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 outline-none focus:border-brand-gold/50 transition-colors text-sm resize-none" />
+
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Primary Performance Area</label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {categories.map((cat) => (
+                        <button
+                          key={cat}
+                          onClick={() => setFormData({...formData, category: cat})}
+                          className={`py-4 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all border ${formData.category === cat ? 'bg-[#D4AF37]/10 border-[#D4AF37] text-white shadow-[0_0_20px_rgba(212,175,55,0.1)]' : 'bg-[#131313] border-white/5 text-white/20 hover:bg-white/5'}`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-[#20201F]/30 p-8 rounded-[2rem] border border-white/5 space-y-4 flex items-center gap-6">
+                    <div className="p-4 rounded-2xl bg-[#D4AF37]/10 text-[#D4AF37]">
+                      <Sparkles size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-[10px] font-black uppercase tracking-widest mb-1">OK Signal Captured</h3>
+                      <p className="text-white/20 text-[10px] leading-relaxed font-bold uppercase tracking-wider">Your basic profile is ready for orbital calibration.</p>
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -98,27 +174,47 @@ export const BookingForm = () => {
               {currentStep === 2 && (
                 <motion.div
                   key="step2"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  variants={stepVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
                   className="space-y-8"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {['Full Immersion', 'Local Sync', 'Orbital Relay', 'Direct Link'].map((option) => (
-                      <div key={option} className="p-6 glass border border-white/5 rounded-2xl cursor-pointer hover:border-brand-purple/50 hover:bg-white/5 transition-all group overflow-hidden relative">
-                        <div className="absolute -right-4 -bottom-4 w-12 h-12 bg-brand-purple/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
-                        <h3 className="text-sm font-bold uppercase tracking-widest mb-2 relative z-10">{option}</h3>
-                        <p className="text-[10px] text-white/30 font-medium relative z-10">Enhanced orbit enabled</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <button 
+                      onClick={() => setFormData({...formData, hasShots: true})}
+                      className={`p-10 rounded-[2.5rem] border flex flex-col items-center gap-6 text-center transition-all group ${formData.hasShots ? 'bg-[#D4AF37]/10 border-[#D4AF37]' : 'bg-[#131313] border-white/5 hover:bg-white/5'}`}
+                    >
+                      <div className={`p-5 rounded-2xl transition-all ${formData.hasShots ? 'bg-[#D4AF37] text-black shadow-[0_0_30px_rgba(212,175,55,0.4)]' : 'bg-white/5 text-white/20'}`}>
+                        <Upload size={24} className="group-hover:translate-y-[-2px] transition-transform" />
                       </div>
-                    ))}
+                      <div>
+                        <h4 className="text-[10px] font-black uppercase tracking-widest mb-2">Upload Shots</h4>
+                        <p className="text-[9px] text-white/20 font-bold uppercase">High fidelity photographs</p>
+                      </div>
+                    </button>
+
+                    <button 
+                      onClick={() => setFormData({...formData, hasVideo: true})}
+                      className={`p-10 rounded-[2.5rem] border flex flex-col items-center gap-6 text-center transition-all group ${formData.hasVideo ? 'bg-[#D4AF37]/10 border-[#D4AF37]' : 'bg-[#131313] border-white/5 hover:bg-white/5'}`}
+                    >
+                      <div className={`p-5 rounded-2xl transition-all ${formData.hasVideo ? 'bg-[#D4AF37] text-black shadow-[0_0_30px_rgba(212,175,55,0.4)]' : 'bg-white/5 text-white/20'}`}>
+                        <Video size={24} className="group-hover:translate-y-[-2px] transition-transform" />
+                      </div>
+                      <div>
+                        <h4 className="text-[10px] font-black uppercase tracking-widest mb-2">Upload Video</h4>
+                        <p className="text-[9px] text-white/20 font-bold uppercase">Live performance reel</p>
+                      </div>
+                    </button>
                   </div>
-                  <div className="p-6 rounded-2xl bg-brand-gold/5 border border-brand-gold/20 flex items-center gap-4">
-                    <div className="p-3 rounded-xl bg-brand-gold/20">
-                      <Globe className="text-brand-gold" size={24} />
+
+                  <div className="bg-[#131313] rounded-[2rem] p-8 flex items-center gap-6 group hover:bg-[#20201F] transition-colors cursor-pointer border border-white/5">
+                    <div className="p-4 rounded-2xl bg-white/5 text-white/20 group-hover:text-[#D4AF37] transition-all">
+                      <Music size={24} />
                     </div>
                     <div>
-                      <h3 className="text-white font-black uppercase tracking-tighter text-sm">Orbital Support</h3>
-                      <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider">Dedicated signal concierge included</p>
+                      <h4 className="text-sm font-black uppercase tracking-widest mb-1">Audio Terminal</h4>
+                      <p className="text-[10px] text-white/30 font-bold uppercase tracking-wider">Connect Soundcloud or Spotify links</p>
                     </div>
                   </div>
                 </motion.div>
@@ -127,44 +223,115 @@ export const BookingForm = () => {
               {currentStep === 3 && (
                 <motion.div
                   key="step3"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  variants={stepVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
                   className="space-y-8"
                 >
-                  <div className="text-center py-6">
-                    <p className="text-brand-purple text-[10px] font-black uppercase tracking-[0.3em] mb-6">Synchronization Check</p>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {['10:00 AM', '02:00 PM', '06:00 PM', '09:00 PM', '11:00 PM', '01:00 AM'].map(time => (
-                        <button key={time} className="py-4 glass border border-white/5 rounded-xl text-[10px] font-black hover:border-brand-gold/50 hover:text-brand-gold transition-all uppercase tracking-widest">
-                          {time}
-                        </button>
+                  <div className="bg-[#131313] rounded-[3rem] p-12 border border-white/5 text-center relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    
+                    <div className="relative z-10">
+                      <div className="w-20 h-20 bg-[#D4AF37]/10 text-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-8 shadow-[0_0_50px_rgba(124,58,237,0.1)]">
+                        <ShieldCheck size={40} className="animate-pulse" />
+                      </div>
+                      <h4 className="text-xl font-black uppercase tracking-tighter italic mb-4">Pending Panel Evaluation</h4>
+                      <p className="text-white/30 text-[10px] uppercase tracking-widest leading-relaxed max-w-sm mx-auto font-bold">
+                        Our specialized panel members will analyze your registration sequence. 
+                        Verified nodes receive priority indexing in the global discovery terminal.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-6 rounded-3xl bg-[#131313] border border-white/5 space-y-2">
+                      <CheckCircle2 size={16} className="text-[#D4AF37]" />
+                      <h5 className="text-[10px] font-black uppercase tracking-widest">Level Tags</h5>
+                      <p className="text-[9px] text-white/20 uppercase font-bold">Assigned post-review</p>
+                    </div>
+                    <div className="p-6 rounded-3xl bg-[#131313] border border-white/5 space-y-2">
+                      <Terminal size={16} className="text-[#D4AF37]" />
+                      <h5 className="text-[10px] font-black uppercase tracking-widest">Listing Info</h5>
+                      <p className="text-[9px] text-white/20 uppercase font-bold">Real-time DB sync</p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {currentStep === 4 && (
+                <motion.div
+                  key="step4"
+                  variants={stepVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="space-y-8"
+                >
+                  <div className="bg-gradient-to-br from-[#131313] to-[#0E0E0E] rounded-[2.5rem] p-10 space-y-8 border border-white/5">
+                    <div className="flex items-center gap-6">
+                      <div className="p-4 rounded-2xl bg-[#D4AF37]/10 text-[#D4AF37]">
+                        <CircleDollarSign size={32} />
+                      </div>
+                      <div>
+                        <h4 className="text-2xl font-black uppercase tracking-tight italic">Earning Potential</h4>
+                        <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Unlocking Global Bookings</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4 pt-4">
+                      {[
+                        "Accept bookings directly through the terminal",
+                        "Perform at premium orbital events",
+                        "Scale your revenue with verified tags",
+                        "Secure automated payment settlements"
+                      ].map((perk, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <CheckCircle2 size={14} className="text-[#D4AF37]" />
+                          <span className="text-[10px] text-white/60 font-medium tracking-tight">{perk}</span>
+                        </div>
                       ))}
                     </div>
+                  </div>
+
+                  <div className="p-8 rounded-[2rem] border border-[#D4AF37]/20 bg-[#D4AF37]/5">
+                    <h4 className="text-[10px] font-black uppercase tracking-widest mb-3 flex items-center gap-2">
+                       <ShieldCheck size={14} className="text-[#D4AF37]" /> 
+                       Registration Confirmation
+                    </h4>
+                    <p className="text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-wider">
+                      By completing this sequence, you agree to the orbital guidelines. 
+                      Your data will be encrypted and indexed within 24 cycles.
+                    </p>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <div className="flex items-center justify-between pt-10 border-t border-white/5 mt-8">
-              <Button
-                variant="ghost"
+            <div className="flex items-center justify-between pt-12 mt-12 border-t border-white/5">
+              <button
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className={`text-[10px] font-black uppercase tracking-widest ${currentStep === 1 ? 'opacity-0 pointer-events-none' : ''}`}
+                className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all ${currentStep === 1 ? 'opacity-0 pointer-events-none' : 'text-white/40 hover:text-white'}`}
               >
                 <ChevronLeft size={16} />
                 Back
-              </Button>
+              </button>
               
-              {currentStep < 3 ? (
-                <Button onClick={nextStep} className="text-[10px] font-black uppercase tracking-widest">
-                  Next Step
+              {currentStep < 4 ? (
+                <Button 
+                  onClick={nextStep} 
+                  className="bg-white text-black hover:bg-[#D4AF37] hover:text-black transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] text-[10px] font-black uppercase tracking-[0.2em] px-10 py-6 rounded-full border-none"
+                >
+                  Continue
                   <ChevronRight size={16} />
                 </Button>
               ) : (
-                <Button onClick={handleSubmit} className="px-12 bg-white text-black hover:bg-brand-gold transition-colors shadow-[0_0_30px_rgba(255,255,255,0.2)] text-[10px] font-black uppercase tracking-widest border-none">
-                  Finalize Sync
+                <Button 
+                  onClick={handleSubmit} 
+                  className="bg-gradient-to-r from-[#D4AF37] to-[#7C3AED] text-black hover:brightness-110 transition-all shadow-[0_0_50px_rgba(212,175,55,0.2)] text-[10px] font-black uppercase tracking-[0.2em] px-14 py-6 rounded-full border-none"
+                >
+                  Complete Registration
                 </Button>
               )}
             </div>
@@ -172,17 +339,32 @@ export const BookingForm = () => {
         </>
       ) : (
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center py-20 bg-[#050810] relative z-10"
+          className="text-center py-20 relative px-4"
         >
-          <div className="w-24 h-24 rounded-full bg-brand-gold/20 border border-brand-gold/30 flex items-center justify-center mx-auto mb-8 shadow-[0_0_50px_rgba(212,175,55,0.4)]">
-            <CheckCircle2 size={48} className="text-brand-gold" />
+          <div className="relative w-32 h-32 mx-auto mb-12">
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', damping: 10, stiffness: 100 }}
+              className="absolute inset-0 bg-gradient-to-br from-[#D4AF37] to-[#7C3AED] rounded-full shadow-[0_0_60px_rgba(124,58,237,0.4)]"
+            />
+            <div className="absolute inset-0 flex items-center justify-center text-black">
+              <CheckCircle2 size={56} />
+            </div>
           </div>
-          <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-4">Orbit <span className="text-brand-purple not-italic">Synced.</span></h2>
-          <p className="text-white/40 text-xs font-bold uppercase tracking-[0.2em] mb-12">Registration received. Welcome to the Beyond.</p>
-          <Button onClick={() => window.location.href = '/'} variant="secondary" className="text-[10px] font-black uppercase tracking-[0.2em] bg-brand-gold text-black border-none hover:bg-white">
-            Return to Command Center
+          
+          <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-6">Profile <span className="text-[#D4AF37] not-italic">Indexed.</span></h2>
+          <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.4em] mb-12 max-w-sm mx-auto leading-loose">
+            Your registration sequence is complete. The stage is calibrating for your debut. Welcome to OcassionOrbit.
+          </p>
+          
+          <Button 
+            onClick={() => window.location.reload()} 
+            className="rounded-full px-12 py-7 bg-white/5 border border-white/10 hover:bg-white/10 text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-none"
+          >
+            Enter The Terminal
           </Button>
         </motion.div>
       )}

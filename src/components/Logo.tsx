@@ -25,14 +25,14 @@ export const Logo = ({ className = "", size = 'sm', showText = true }: LogoProps
           alt="OcassionOrbit Logo"
           width={400}
           height={400}
-          className="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(139,92,246,0.3)]"
+          className="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(124,58,237,0.3)]"
           priority
         />
       </div>
 
       {showText && (
         <div className="flex flex-col">
-          <h1 className={`${currentSize.text} font-serif font-medium tracking-tight text-brand-gold leading-[0.8]`}>
+          <h1 className={`${currentSize.text} font-serif font-medium tracking-tight text-[#D4AF37] leading-[0.8]`}>
             OcassionOrbit
           </h1>
           <p className={`${currentSize.sub} font-sans font-bold tracking-[0.4em] text-white/30 uppercase mt-2`}>

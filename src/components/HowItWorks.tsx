@@ -9,19 +9,19 @@ const steps = [
     icon: Layout,
     title: 'Select Your Orbit',
     description: 'Choose from a variety of virtual and physical venues tailored for your performance style.',
-    color: 'bg-brand-purple'
+    color: 'bg-[#D4AF37]'
   },
   {
     icon: Link2,
-    title: 'Sync Your Voice',
-    description: 'Connect your interface and calibrate your orbital signature with our AI-driven neural bridge.',
-    color: 'bg-brand-gold'
+    title: 'Ignite Your Energy',
+    description: 'Connect your interface and calibrate your energy pulse with our AI-driven neural bridge.',
+    color: 'bg-[#D4AF37]'
   },
   {
     icon: Mic2,
     title: 'Perform Live',
     description: 'Broadcast to a global audience with sub-5ms latency and full immersive stage effects.',
-    color: 'bg-brand-purple'
+    color: 'bg-[#D4AF37]'
   }
 ];
 
@@ -31,7 +31,7 @@ export const HowItWorks = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-24">
           <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter italic text-white mb-6">
-            The Performance <span className="text-brand-purple not-italic">Loop</span>
+            The Performance <span className="text-[#D4AF37] not-italic">Loop</span>
           </h2>
           <p className="text-white/40 max-w-2xl mx-auto text-xs font-bold uppercase tracking-[0.2em] leading-loose">
             A seamless journey from initial registration to your first global headline performance.
@@ -40,7 +40,7 @@ export const HowItWorks = () => {
 
         <div className="max-w-4xl mx-auto relative">
           {/* Vertical Line */}
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-brand-purple via-brand-gold to-transparent hidden md:block" />
+          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#D4AF37] via-[#D4AF37]/50 to-transparent hidden md:block" />
 
           <div className="space-y-24">
             {steps.map((step, index) => (
@@ -62,8 +62,8 @@ export const HowItWorks = () => {
 
                 {/* Step Connector Icon */}
                 <div className="relative z-10">
-                   <div className={`w-16 h-16 rounded-full ${step.color} shadow-[0_0_30px_rgba(220,184,255,0.4)] flex items-center justify-center border-4 border-brand-bg`}>
-                      <step.icon className="w-8 h-8 text-white" />
+                   <div className={`w-16 h-16 rounded-full ${step.color} shadow-[0_0_40px_rgba(212,175,55,0.3)] flex items-center justify-center border-4 border-[#0E0E0E]`}>
+                      <step.icon className="w-8 h-8 text-black" />
                    </div>
                 </div>
 

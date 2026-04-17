@@ -7,7 +7,7 @@ import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { DiscordIcon } from './SocialIcons';
 
-export const Navbar = () => {
+export const Navbar = ({ onBookingClick }: { onBookingClick?: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -61,8 +61,12 @@ export const Navbar = () => {
           <Link href="#" className="text-white/40 hover:text-brand-gold transition-colors">
             <DiscordIcon className="w-5 h-5" />
           </Link>
-          <Button size="sm" className="rounded-full px-8 py-5 text-[10px] uppercase font-black tracking-widest bg-brand-gold text-black hover:bg-white border-none">
-            Join Orbit
+          <Button 
+            onClick={onBookingClick}
+            size="sm" 
+            className="rounded-full px-8 py-5 text-[10px] uppercase font-black tracking-widest bg-brand-gold text-black hover:bg-white border-none"
+          >
+            Register Yourself
           </Button>
         </div>
 
@@ -88,7 +92,7 @@ export const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          <Button className="w-full">Get Started</Button>
+          <Button onClick={onBookingClick} className="w-full">Get Started</Button>
         </div>
       )}
     </nav>

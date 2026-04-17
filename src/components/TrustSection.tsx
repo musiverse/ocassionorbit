@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const logos = [
-  'Sonic Orbit', 'Bass Sync', 'Orbital Flux', 'Beat Nexus', 'Pulse Collective', 'Cloud Arena'
+  'Sonic Orbit', 'Bass Energy', 'Orbital Flux', 'Beat Nexus', 'Pulse Collective', 'Cloud Arena'
 ];
 
 export const TrustSection = () => {
@@ -25,7 +25,7 @@ export const TrustSection = () => {
                transition={{ delay: index * 0.1 }}
                className="flex justify-center"
              >
-               <span className="text-sm font-black text-white/60 hover:text-brand-purple transition-colors cursor-default uppercase tracking-tighter italic">
+               <span className="text-sm font-black text-white/60 hover:text-[#7C3AED] transition-colors cursor-default uppercase tracking-tighter italic">
                  {logo}
                </span>
              </motion.div>
@@ -34,20 +34,20 @@ export const TrustSection = () => {
         
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
            {[
-             { label: '<5ms', sub: 'SYNC LATENCY' },
+             { label: '<5ms', sub: 'ENERGY CONSTANT' },
              { label: '1M+', sub: 'ORBITAL ARTISTS' },
              { label: '4K+', sub: 'ORBITAL TERMINALS' }
            ].map((stat, index) => (
              <motion.div
                key={index}
-               initial={{ opacity: 0, scale: 0.9 }}
-               whileInView={{ opacity: 1, scale: 1 }}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                transition={{ delay: index * 0.2 }}
-               className="text-center p-8 glass rounded-2xl border border-white/5"
+               className="text-center p-8 bg-[#131313] rounded-3xl border border-white/5 group hover:border-[#D4AF37]/30 transition-all duration-500"
              >
-               <div className="text-5xl font-black text-white mb-2 tracking-tighter italic">{stat.label}</div>
-               <div className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">{stat.sub}</div>
+               <div className="text-6xl font-black text-white mb-2 tracking-tighter italic group-hover:text-[#D4AF37] transition-colors">{stat.label}</div>
+               <div className="text-white/20 text-[10px] font-black uppercase tracking-[0.3em]">{stat.sub}</div>
              </motion.div>
            ))}
         </div>

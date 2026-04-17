@@ -7,6 +7,14 @@
   --color-brand-gold: #D4AF37;
   --color-brand-gold-muted: #B8860B;
   
+  /* Cinematic Stage - Premium Palette */
+  --color-brand-coral: #FF8C69;
+  --color-brand-coral-muted: #F1815F;
+  --color-brand-bg-deep: #0E0E0E;
+  --color-brand-surface-low: #131313;
+  --color-brand-surface-high: #20201F;
+  --color-brand-progress-track: #262626;
+  
   --color-glass-white: rgba(255, 255, 255, 0.05);
   --color-glass-purple: rgba(123, 44, 191, 0.1);
   
