@@ -47,3 +47,10 @@ export function performerInquiryLink({
 
   return whatsappLink(lines.join('\n'));
 }
+
+// Legal identity shown on the policy pages and footer. Payment-gateway review
+// checks these against the company's KYC, so keep them exact.
+export const COMPANY_NAME = 'OCCASIONORBIT PRIVATE LIMITED';
+export const SUPPORT_EMAIL = 'contact@occasionorbit.com';
+export const REGISTERED_ADDRESS = '338/A, DLW Colony, D.L.W., Varanasi - 221004, Uttar Pradesh, India';
+export const POLICIES_UPDATED = '31 October 2026';

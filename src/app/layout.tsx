@@ -6,6 +6,7 @@ import { Preloader } from "@/components/Preloader";
 import { WaveformBackground } from "@/components/WaveformBackground";
 import { RibbonSweep } from "@/components/RibbonSweep";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default function RootLayout({
         {/* Replaces the footer: sweeps in once the reader reaches the bottom. */}
         <RibbonSweep />
         {children}
+        <SiteFooter />
         <WhatsAppFloat />
       </body>
     </html>
