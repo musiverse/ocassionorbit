@@ -7,6 +7,7 @@ export const policyLinks = [
   { name: 'Privacy Policy', href: '/privacy/' },
   { name: 'Refund & Cancellation', href: '/refund-policy/' },
   { name: 'Shipping & Delivery', href: '/shipping-policy/' },
+  { name: 'Delete Account', href: '/delete-account/' },
 ];
 
 /** Slim legal strip under every page; the ribbon sweep stays the visual close. */
