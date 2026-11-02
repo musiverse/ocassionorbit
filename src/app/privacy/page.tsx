@@ -88,9 +88,10 @@ export default function PrivacyPage() {
 
       <h2>Your rights</h2>
       <p>
-        You can access and correct your profile in the app, withdraw consent, or ask us to delete
-        your account and data by writing to <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
-        We respond within 30 days.
+        You can access and correct your profile in the app, withdraw consent, or delete your
+        account in the app or by request; see <Link href="/delete-account/">Delete Your Account</Link>.
+        For other requests, write to <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>. We
+        respond within 30 days.
       </p>
 
       <h2>Children</h2>
