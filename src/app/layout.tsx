@@ -1,53 +1,38 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Geist, Playfair_Display } from "next/font/google";
 import "./globals.css";
-
-import { Preloader } from "@/components/Preloader";
+import { Navbar } from "@/components/Navbar";
+import { SiteFooter } from "@/components/SiteFooter";
+import { Footer } from "@/components/Footer";
 import { WaveformBackground } from "@/components/WaveformBackground";
 import { RibbonSweep } from "@/components/RibbonSweep";
-import { WhatsAppFloat } from "@/components/WhatsAppFloat";
-import { SiteFooter } from "@/components/SiteFooter";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
 });
-
 export const metadata: Metadata = {
-  title: "OcassionOrbit | Events. Connected. Beyond.",
-  description: "Advanced event orchestration and connectivity platform. Beyond live performance, we connect worlds.",
+  title: "OccasionOrbit | Live music for your occasion",
+  description:
+    "Plan live music for weddings, corporate events, and private celebrations. Explore performance styles and ask OccasionOrbit for artist availability and a tailored quote.",
 };
-
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
-      suppressHydrationWarning
-    >
-      <body className="min-h-full flex flex-col bg-brand-bg">
-        <Preloader />
-        {/* Mounted once here, not per-page, so every route sits on the same stage. */}
+    <html lang="en" className={`${geist.variable} ${playfair.variable}`}>
+      <body>
         <WaveformBackground />
-        {/* Replaces the footer: sweeps in once the reader reaches the bottom. */}
         <RibbonSweep />
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
+        <Navbar />
         {children}
+        <Footer />
         <SiteFooter />
-        <WhatsAppFloat />
       </body>
     </html>
   );

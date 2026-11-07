@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef } from 'react';
-import { getScrollState, subscribeScroll } from '@/lib/useScrollProgress';
+import React, { useEffect, useRef } from "react";
+import { getScrollState, subscribeScroll } from "@/lib/useScrollProgress";
+import { createSceneLoop, easeScene, scenePixelRatio } from "@/lib/sceneMotion";
 
 /**
- * The page's closing note, in place of a footer.
+ * The page's closing note, behind the closing section and footer.
  *
  * A glossy ribbon twists through 3D space and sweeps left → right along the
  * bottom of the viewport. It's pinned (fixed) and lives at a negative z-index:
@@ -46,62 +47,66 @@ export const RibbonSweep = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let width = 0;
     let height = 0;
-    let frame = 0;
-    let running = true;
 
     // Eased toward the scroll-derived target each frame, so the reveal glides
     // instead of tracking the scrollbar 1:1.
     let reveal = 0;
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
       height = canvas.clientHeight;
+      const dpr = scenePixelRatio(width, height);
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    resize();
-    window.addEventListener('resize', resize, { passive: true });
-
-    /** Fully shown only once the reader has actually reached the bottom. */
+    let closingStart = 0;
+    let hasClosing = false;
+    const measureClosing = () => {
+      const closing = document.querySelector(".closing-section");
+      hasClosing = !!closing;
+      closingStart = closing
+        ? closing.getBoundingClientRect().top + window.scrollY
+        : 0;
+    };
     const targetReveal = () => {
-      const { progress, runway } = getScrollState();
-      // A page too short to scroll would otherwise never reveal it.
+      const { progress, runway, scrollY } = getScrollState();
+      if (hasClosing)
+        return smoothstep(
+          closingStart - window.innerHeight * 0.95,
+          closingStart - window.innerHeight * 0.2,
+          scrollY,
+        );
       if (runway <= 0.05) return 1;
-      return smoothstep(0.82, 0.99, progress);
+      return smoothstep(0.72, 0.98, progress);
     };
 
-    // Repaint on scroll even while paused, so the reveal still tracks.
-    const unsubscribe = subscribeScroll(() => {
-      if (!running) reveal = targetReveal();
-    });
-
-    const draw = (elapsed: number) => {
-      const t = reduced ? 0 : elapsed * 0.001;
-
-      reveal += (targetReveal() - reveal) * 0.08;
+    const draw = (elapsed: number, delta: number) => {
+      const t = reduced ? 0 : elapsed * (width < 768 ? 0.65 : 1);
+      reveal = reduced
+        ? targetReveal()
+        : easeScene(reveal, targetReveal(), delta, 300);
 
       ctx.clearRect(0, 0, width, height);
 
       if (reveal < 0.01) return;
 
-      const baseY = height * 0.62;
+      const baseY = height * 0.45;
       const amplitude = height * 0.14;
       const maxHalf = height * 0.17;
 
       ctx.globalAlpha = reveal;
       // The ribbon reads as emitted light, not paint — additive keeps it glowing
       // over the dark mesh rather than flatly occluding it.
-      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalCompositeOperation = "lighter";
 
       // Slide up into place as it fades in.
       ctx.save();
@@ -109,13 +114,15 @@ export const RibbonSweep = () => {
 
       let prev: { x: number; top: number; bottom: number } | null = null;
 
-      for (let i = 0; i <= SEGMENTS; i++) {
-        const u = i / SEGMENTS;
+      const segments = width < 768 ? 80 : SEGMENTS;
+      for (let i = 0; i <= segments; i++) {
+        const u = i / segments;
         const x = u * width;
 
         // Subtracting time marches the pattern to the right.
         const phase = u * Math.PI * 2 * WAVE_FREQ - t * SPEED * Math.PI * 2;
-        const twistPhase = u * Math.PI * 2 * TWIST_FREQ - t * SPEED * Math.PI * 1.4;
+        const twistPhase =
+          u * Math.PI * 2 * TWIST_FREQ - t * SPEED * Math.PI * 1.4;
 
         // -1 = far face toward us, +1 = near face toward us, 0 = edge-on.
         const facing = Math.cos(twistPhase);
@@ -135,7 +142,7 @@ export const RibbonSweep = () => {
           const g = lerp(PURPLE[1], GOLD[1], faceMix);
           const b = lerp(PURPLE[2], GOLD[2], faceMix);
 
-          const shade = 0.18 + 0.82 * openness;
+          const shade = 0.22 + 0.78 * openness;
           const specular = Math.pow(openness, 10);
 
           const grad = ctx.createLinearGradient(0, top, 0, bottom);
@@ -154,6 +161,12 @@ export const RibbonSweep = () => {
           ctx.lineTo(prev.x, prev.bottom);
           ctx.closePath();
           ctx.fill();
+          ctx.strokeStyle = `rgba(249,229,169,${0.16 + specular * 0.48})`;
+          ctx.lineWidth = 0.7;
+          ctx.beginPath();
+          ctx.moveTo(prev.x, prev.top);
+          ctx.lineTo(x, top);
+          ctx.stroke();
         }
 
         prev = { x, top, bottom };
@@ -162,11 +175,11 @@ export const RibbonSweep = () => {
       // A soft bloom pass along the crest, to bed the ribbon into the scene.
       ctx.globalAlpha = reveal * 0.32;
       ctx.lineWidth = 2;
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
-      ctx.filter = 'blur(6px)';
+      ctx.strokeStyle = "rgba(212, 175, 55, 0.5)";
+      ctx.filter = "blur(6px)";
       ctx.beginPath();
-      for (let i = 0; i <= SEGMENTS; i++) {
-        const u = i / SEGMENTS;
+      for (let i = 0; i <= segments; i++) {
+        const u = i / segments;
         const x = u * width;
         const phase = u * Math.PI * 2 * WAVE_FREQ - t * SPEED * Math.PI * 2;
         const y = baseY + Math.sin(phase) * amplitude;
@@ -174,38 +187,40 @@ export const RibbonSweep = () => {
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
-      ctx.filter = 'none';
+      ctx.filter = "none";
 
       ctx.restore();
       ctx.globalAlpha = 1;
-      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalCompositeOperation = "source-over";
     };
 
-    const loop = (now: number) => {
-      draw(now);
-      frame = requestAnimationFrame(loop);
+    const animation = createSceneLoop(
+      (seconds, delta, staticMode) => {
+        reduced = staticMode;
+        canvas.dataset.motion = reduced ? "static" : "animated";
+        draw(seconds, delta);
+      },
+      () => targetReveal() > 0.01 || reveal > 0.01,
+    );
+    const unsubscribe = subscribeScroll(() => animation.invalidate());
+    const resizeScene = () => {
+      resize();
+      measureClosing();
+      animation.invalidate();
     };
-
-    frame = requestAnimationFrame(loop);
-
-    // Don't burn a rAF loop on a tab nobody is looking at.
-    const onVisibility = () => {
-      if (document.hidden) {
-        running = false;
-        cancelAnimationFrame(frame);
-      } else if (!running) {
-        running = true;
-        frame = requestAnimationFrame(loop);
-      }
-    };
-
-    document.addEventListener('visibilitychange', onVisibility);
-
+    resizeScene();
+    window.addEventListener("resize", resizeScene, { passive: true });
+    // Layout changes and client-side route transitions move the closing section.
+    const observer = new ResizeObserver(() => {
+      measureClosing();
+      animation.invalidate();
+    });
+    observer.observe(document.body);
     return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('resize', resize);
-      document.removeEventListener('visibilitychange', onVisibility);
+      animation.dispose();
+      observer.disconnect();
       unsubscribe();
+      window.removeEventListener("resize", resizeScene);
     };
   }, []);
 
@@ -215,7 +230,7 @@ export const RibbonSweep = () => {
       aria-hidden="true"
       // -z-[5] threads the needle: above the waveform mesh (-z-10), below every
       // page element, which paints in the normal (auto) layer.
-      className="pointer-events-none fixed bottom-0 left-0 w-full h-[38vh] min-h-[220px] -z-[5]"
+      className="pointer-events-none fixed bottom-[14vh] left-0 w-full h-[38vh] min-h-[220px] -z-[5]"
     />
   );
 };

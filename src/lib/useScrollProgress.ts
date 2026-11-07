@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from "react";
 
 /**
  * One scroll listener for the whole site.
@@ -29,6 +29,7 @@ const INITIAL: ScrollState = { scrollY: 0, progress: 0, runway: 0 };
 let state: ScrollState = INITIAL;
 const listeners = new Set<() => void>();
 let ticking = false;
+let resizeObserver: ResizeObserver | undefined;
 
 const measure = () => {
   ticking = false;
@@ -59,17 +60,21 @@ const schedule = () => {
 
 const subscribe = (onStoreChange: () => void) => {
   if (listeners.size === 0) {
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
     measure();
+    resizeObserver = new ResizeObserver(schedule);
+    resizeObserver.observe(document.body);
   }
   listeners.add(onStoreChange);
 
   return () => {
     listeners.delete(onStoreChange);
     if (listeners.size === 0) {
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      resizeObserver?.disconnect();
+      resizeObserver = undefined;
     }
   };
 };

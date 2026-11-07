@@ -1,68 +1,70 @@
-'use client';
-
-import React from 'react';
-import { motion } from 'framer-motion';
-
-const logos = [
-  'Sonic Orbit',
-  'Bass Energy',
-  'Orbital Flux',
-  'Beat Nexus',
-  'Pulse Collective',
-  'Cloud Arena',
+const network = [
+  "Sonic Orbit",
+  "Bass Energy",
+  "Orbital Flux",
+  "Beat Nexus",
+  "Pulse Collective",
+  "Cloud Arena",
 ];
-
-const stats = [
-  { label: '<5ms', sub: 'Energy Constant' },
-  { label: '1M+', sub: 'Orbital Artists' },
-  { label: '4K+', sub: 'Orbital Terminals' },
-];
-
-export const TrustSection = () => {
+export function TrustSection() {
   return (
-    <section className="py-24 border-y border-white/5 bg-white/[0.015] backdrop-blur-sm">
-      <div className="container mx-auto px-6">
-        <p className="text-center text-white/40 text-[10px] font-black mb-12 uppercase tracking-[0.3em]">
-          Partnered with elite sound engineering labs
-        </p>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
-          {logos.map((logo, index) => (
-            <motion.div
-              key={logo}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: index * 0.06, duration: 0.5 }}
-              className="flex justify-center"
-            >
-              <span className="text-sm font-black text-white/35 hover:text-brand-purple-light transition-colors cursor-default uppercase tracking-tighter italic">
-                {logo}
-              </span>
-            </motion.div>
-          ))}
+    <section
+      className="section wrap platform-vision"
+      aria-labelledby="vision-heading"
+    >
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow gold">The platform vision</p>
+          <h2 id="vision-heading">
+            A bigger stage.
+            <br />
+            <em>A connected orbit.</em>
+          </h2>
         </div>
-
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.sub}
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ delay: index * 0.12, duration: 0.6, ease: 'easeOut' }}
-              className="text-center p-8 glass-solid rounded-3xl group hover:border-brand-gold/30 transition-all duration-500"
-            >
-              <div className="text-6xl font-black text-white mb-2 tracking-tighter italic group-hover:text-brand-gold transition-colors">
-                {stat.label}
-              </div>
-              <div className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em]">
-                {stat.sub}
-              </div>
-            </motion.div>
+        <p>
+          Artists, venues, and performance technology in one connected
+          ecosystem. These are the ambitions behind the original OccasionOrbit
+          platform.
+        </p>
+      </div>
+      <div className="vision-grid">
+        {[
+          {
+            value: "<5ms",
+            title: "Streaming latency target",
+            detail: "The original performance technology goal.",
+          },
+          {
+            value: "1M+",
+            title: "Artist network ambition",
+            detail: "A long-term vision for a connected artist community.",
+          },
+          {
+            value: "4K+",
+            title: "Venue network ambition",
+            detail: "A long-term vision for virtual and physical stages.",
+          },
+        ].map((s) => (
+          <article key={s.title}>
+            <strong>{s.value}</strong>
+            <h3>{s.title}</h3>
+            <p>{s.detail}</p>
+          </article>
+        ))}
+      </div>
+      <p className="section-note">
+        Platform targets and concepts, rather than current operating results.
+      </p>
+      <div className="network-preview">
+        <p className="eyebrow">
+          Partner network concept · affiliations to be confirmed
+        </p>
+        <div>
+          {network.map((n) => (
+            <span key={n}>{n}</span>
           ))}
         </div>
       </div>
     </section>
   );
-};
+}

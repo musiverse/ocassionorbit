@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar } from './Navbar';
+
 import { POLICIES_UPDATED } from '@/lib/contact';
 
 /**
@@ -16,9 +16,9 @@ export const LegalPage = ({
   children: React.ReactNode;
 }) => (
   <div className="min-h-screen text-white selection:bg-brand-purple/30">
-    <Navbar />
 
-    <main className="pt-32 pb-24">
+
+    <main id="main-content" className="wrap page-main">
       <div className="container mx-auto px-6 max-w-3xl">
         <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">{title}</h1>
         {showUpdated && (

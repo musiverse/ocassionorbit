@@ -363,7 +363,7 @@ export const BookingForm = () => {
           
           <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-6">Profile <span className="text-[#D4AF37] not-italic">Indexed.</span></h2>
           <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.4em] mb-12 max-w-sm mx-auto leading-loose">
-            WhatsApp is open with your details — hit send there and our panel picks it up. Welcome to OcassionOrbit.
+            WhatsApp is open with your details — hit send there and our panel picks it up. Welcome to OccasionOrbit.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

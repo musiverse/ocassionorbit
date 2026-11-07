@@ -14,10 +14,10 @@ export function whatsappLink(message: string): string {
 }
 
 export const GENERAL_INQUIRY =
-  "Hi OcassionOrbit! I'd like to know more about booking an artist for my event.";
+  "Hi OccasionOrbit! I'd like to know more about booking an artist for my event.";
 
 export const BOOKING_INQUIRY =
-  "Hi OcassionOrbit! I'm planning an event and would like to check availability and pricing.";
+  "Hi OccasionOrbit! I'm planning an event and would like to check availability and pricing.";
 
 /** Plain wa.me link with a general inquiry pre-filled. */
 export const PHONE_WHATSAPP = whatsappLink(GENERAL_INQUIRY);
@@ -38,7 +38,7 @@ export function performerInquiryLink({
   category,
 }: PerformerDetails): string {
   const lines = [
-    'Hi OcassionOrbit! I want to register as a performer.',
+    'Hi OccasionOrbit! I want to register as a performer.',
     '',
     `Name: ${fullName || '—'}`,
     `Contact: ${contactNumber || '—'}`,
